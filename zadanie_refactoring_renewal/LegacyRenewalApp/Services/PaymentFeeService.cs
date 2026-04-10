@@ -5,38 +5,16 @@ namespace LegacyRenewalApp.Services;
 public class PaymentFeeService 
     : IPaymentFeeService 
 {
-    public FeeResult Calculate(string paymentMethod, decimal subtotal, decimal supportFee) {
-        
-        string notes = string.Empty;
-        
-        decimal paymentFee = 0m;
-        
-        if (paymentMethod == "CARD")
+    public FeeResult Calculate(string paymentMethod, decimal subtotal, decimal supportFee)
+    {
+        return paymentMethod switch
         {
-            paymentFee = (subtotal + supportFee) * 0.02m;
-            notes += "card payment fee; ";
-        }
-        else if (paymentMethod == "BANK_TRANSFER")
-        {
-            paymentFee = (subtotal + supportFee) * 0.01m;
-            notes += "bank transfer fee; ";
-        }
-        else if (paymentMethod == "PAYPAL")
-        {
-            paymentFee = (subtotal + supportFee) * 0.035m;
-            notes += "paypal fee; ";
-        }
-        else if (paymentMethod == "INVOICE")
-        {
-            paymentFee = 0m;
-            notes += "invoice payment; ";
-        }
-        else
-        {
-            throw new ArgumentException("Unsupported payment method");
-        }
-        return new FeeResult(paymentFee, notes);
-        
+            "CARD" => new FeeResult((subtotal + supportFee) * 0.02m, "card payment fee; "),
+            "BANK_TRANSFER" => new FeeResult((subtotal + supportFee) * 0.01m, "bank transfer fee; "),
+            "PAYPAL" => new FeeResult((subtotal + supportFee) * 0.035m, "paypal fee; "),
+            "INVOICE" => new FeeResult(0m, "invoice payment; "),
+            _ => throw new ArgumentException("Unsupported payment method")
+        };
     }
     
 }
