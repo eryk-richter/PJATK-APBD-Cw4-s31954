@@ -15,8 +15,7 @@ namespace LegacyRenewalApp
             bool useLoyaltyPoints)
         {
         
-           SubscriptionValidationService validationService = new SubscriptionValidationService();
-           validationService.Validate(customerId, planCode, seatCount, paymentMethod);
+           new SubscriptionValidationService().Validate(customerId, planCode, seatCount, paymentMethod);
 
             string normalizedPlanCode = planCode.Trim().ToUpperInvariant();
             string normalizedPaymentMethod = paymentMethod.Trim().ToUpperInvariant();
@@ -37,8 +36,8 @@ namespace LegacyRenewalApp
             DiscountService  discountService = new DiscountService();
             var discountResult = discountService.CalculateDiscount(customer, plan, seatCount, useLoyaltyPoints);
             
-            decimal discountAmount = discountResult.discount;
-            string notes = discountResult.notes;
+            var discountAmount = discountResult.discount;
+            var notes = discountResult.notes;
 
             decimal subtotalAfterDiscount = baseAmount - discountAmount;
             if (subtotalAfterDiscount < 300m)
